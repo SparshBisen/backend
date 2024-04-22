@@ -1,9 +1,22 @@
-import mongoose from "mongoose";
-import { DB_NAME } from "./constants";
+// require('dotenv').config({path: './env'});
+// the above line will work properly but it will create lot of irregularityies, so it is not a good practice.
+// ALSO THIS LINE IS COPIED FROM THE DOCUMENTATION OF NPM, so have a look properly
 
 
+// -------------------------------------
 
+// import mongoose from "mongoose";
+// import { DB_NAME } from "./constants";
 
+// --------------------------------------
+
+import dotenv from 'dotenv';
+import connectDB from './db/index.js';  // main code is in index.js file of db folder
+
+dotenv.config({
+    path: "./env"
+})
+connectDB()
 
 
 
