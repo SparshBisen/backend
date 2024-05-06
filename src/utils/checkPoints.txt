@@ -1,0 +1,16 @@
+here we are going to add cloudinary service, basically for uploading we are using third party service and for such kind of operstions
+in production the good practice is to have such files in utils folder.
+
+for uploading there are multiple things which you can upload such as image, video, etc and all have same process.
+
+after creating this structure we can inject this structure in any end point as a MIDDLEWARE. 
+
+
+STEPS of setting:
+
+1.we will use 'multer' for the uploading.
+(cloudinary is not directly used, actually cloudinary is a service which gives us the functionality of uploading)
+
+2. we will take file from multer and will store that file in our local server (temproarily)
+
+3. from cloudinary we will take the file from the local server then to the main server. (this is done for redo the service if failed)
