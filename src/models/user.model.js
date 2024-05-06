@@ -66,14 +66,49 @@ const userSchema = new mongoose.Schema({
 }, 
 {timepstamps: true}) // this will contain the createdAt and updatedAt section of the model
 
-userSchema.pre("save", async function(next) {
-    if(this.isModified("password")){
-        this.password = bcrypthash(this.password, 10)
+//------------------//------------------//------------------//------------------//------------------//------------------//------------------//------------------
+
+userSchema.pre("save", async function(next) {       // actions before any key event in backend we use 'pre', some tasks which should be done before any action.
+    if(this.isModified("password")){                //  in arrow function we done have the reference of 'this'.
+        this.password = bcrypt.hash(this.password, 10)
         next()
     }
     
 })  // here since we are saving the password we will use save middleware 
             /*      here next is used because we are using middleware so to shift from one state to other we are using next      */
                                                 // LINK : (for differnt middleware for different case) https://mongoosejs.com/docs/middleware.html
+
+userSchema.methods.isPasswordCorrect = async function(password) {
+    return await bcrypt.compare(password, this.password)
+}
+
+userSchema.methods.generateAccessToken = function(){
+    return jwt.sign(
+        {
+            _id : this.id,
+            email : this.email,
+            username : this.username,
+            fullname : this.fullname,
+        },
+
+        process.env.ACCESS_TOKEN_SECREAT,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXIPRY
+        }
+    )
+}
+
+userSchema.methods.generateRefreshToken = function() {
+    return jwt.sign(
+        {
+            _id : this.id,
+        },
+
+        process.env.REFRESH_TOKEN_SECREAT,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+        }
+    )
+}
 
 export const User = mongoose.model("User", userSchema)
