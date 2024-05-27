@@ -71,13 +71,13 @@ const userSchema = new mongoose.Schema({
 //------------------//------------------//------------------//------------------//------------------//------------------//------------------//------------------
 
 userSchema.pre("save", async function(next) {       // actions before any key event in backend we use 'pre', some tasks which should be done before any action.
-    if(this.isModified("password")){                //  in arrow function we done have the reference of 'this'.
+    if(this.isModified("password")){                //  in arrow function we don't have the reference of 'this'.
         this.password = bcrypt.hash(this.password, 10)
         next()
     }
     
 })  // here since we are saving the password we will use save middleware 
-            /*      here next is used because we are using middleware so to shift from one state to other we are using next      */
+            /*      here 'next' is used because we are using middleware so to shift from one state to other we are using next      */
                                                 // LINK : (for differnt middleware for different case) https://mongoosejs.com/docs/middleware.html
 
 userSchema.methods.isPasswordCorrect = async function(password) {
